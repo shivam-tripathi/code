@@ -25,3 +25,15 @@ def main(arr, elem, lower, upper):
 
 a = sorted(list(map ( int, input().split())))
 binSearch(a)
+
+
+'''
+Major realisation here is that every element is bigger than the one before it.
+So one does not have to cover all cases. We can remove all those cases where it
+will definitely not occur, and check in therefore the possible location. As it
+is Binary search, we use recursion to break array/list into two parts, reject
+one and check in the other by breaking it up too.
+
+This sorted approach comes in handy in many other cases, sometimes in dynamic
+programming. (I have quite little knowledge in this presently).
+'''
