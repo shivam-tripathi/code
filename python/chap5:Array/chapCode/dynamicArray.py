@@ -40,13 +40,38 @@ class DynamicArray:
     def _make_Array(self, size):
         return (size * ctypes.py_object)()
 
+    def insert(self, k, value):
+        if not(0 <= k <= self._n-1):
+            raise IndexError('invalid index')
+        if self._n == self._capacity:
+            self._resize(2 * self._n)
+        for j in range(self._n - 1, k-1, -1):
+            self._A[j+1] = self._A[j]
+        self._A[k] = value
+        self._n += 1
+
+    def remove(self, value):
+        for k in range(self._n):
+            if self._A[k] == value:
+                for k1 in range(k,self._n - 1 ):
+                    self._A[k1] = self._A[k1 + 1]
+                self._A[self._n-1] = None
+                self._n -= 1
+                return
+        raise ValueError("no such value in the list")
 
 arr = DynamicArray()
 for i in range(10):
     arr.append(i)
 for i in range(10):
-    print (getitem(arr, i))
-print ('\t',len(arr))
+    print ((arr[i]))
+print ('Length:',len(arr))
+
+arr.insert(4,'a')
+print (list(arr))
+
+arr.remove('a')
+print (list(arr))
 
 '''
 constructor(object)
@@ -97,6 +122,7 @@ increases.
 This doesnot involve probability. Randomisation algorithms use probability to
 prove the running time is less than worse case running time.
 By Aggregate method, the above can be proved, by : 1 + (1+1) + 1 + 1 + 1 +
+= (1 + 1 + 1 + 1 .. n terms) + (1 + 2 + 4 + 8 + .. log(2)(n-1) terms) < n.
 '''
 
 '''
