@@ -1,8 +1,8 @@
-//Implementation of a doubly linked list using templates
 #include <bits/stdc++.h>
-#define len(a) (a.size)
+#define len(a) (a.length())
 #define head(a) (a.front())
 #define tail(a) (a.back())
+#define list_iterator Node*
 using namespace std;
 
 
@@ -12,7 +12,8 @@ using namespace std;
 *																               *
 *******************************************************************************/
 
-template<class T>
+//Implementation of a doubly linked list using templates
+template<typename T>
 class List{
 public:
 	//Structure to store Node of the linked list
@@ -20,6 +21,7 @@ public:
 		T elem;
 		Node* next;
 		Node* prev;
+		Node(){}
 		Node(T item){
 			elem = item;
 			next = NULL;
@@ -34,6 +36,7 @@ public:
 		head = NULL;
 		tail = NULL;
 		size = 0;
+
 	}
 
 	// Add an element to the end of the list
@@ -113,16 +116,12 @@ public:
 	}
 
 	// Front traverse and print the list
-	T* traverse_front(){
-		T* arr = new T[size];
-		int i=0;
+	void traverse_front(){
 		Node* temp = head;
 		while(temp!=NULL){
-			arr[i++] = temp->elem;
 			cout << temp->elem << endl;
 			temp = temp->next;
 		}
-		return arr;
 	}
 
 	// Reverse traverse and print the list
@@ -133,17 +132,6 @@ public:
 			temp = temp->prev;
 		}
 	}
-	void sort(void compare(void*, void*)){
-		T arr[] = traverse_front();
-		qsort(arr, size, sizeof(T), compare);
-		Node* temp = head;
-		int i=0;
-		while(temp != NULL){
-			temp->elem = arr[i++];
-			temp = temp->next;
-		}
-	}
-
 	// Function to delete element with the given value
 	void delete_value(T item){
 		Node* temp = head;
@@ -243,23 +231,83 @@ public:
 		return head;
 	}
 
-	// Get the end of the lsit
+	// Get the end of the list
 	Node* end(){
 		return tail;
 	}
-};
 
+	T value(Node* node){
+		if(node!=NULL)
+			return node->elem;
+	}
+	void next(Node* &node){
+		if(node!=NULL)
+			node = node->next;
+		else
+			return;
+	}
+	void prev(Node* &node){
+		if(node!=NULL)
+			node = node->prev;
+		else
+			return;
+	}
+	Node* merge(Node* first, Node* second){
+		if(!first){
+			return second;
+		}
+		if(!second){
+			return first;
+		}
+		if(first->elem < second->elem){
+			first->next = merge(first->next, second);
+			first->next->prev = first;
+			first->prev	= NULL;
+			return first;
+		}
+		else{
+			second->next = merge(first, second->next );
+			second->next->prev = second;
+			second->prev = NULL;
+			return second;
+		}
+	}
+	Node* split(Node* head){
+		Node* fast = head, *slow = head;
+		while(fast->next && fast->next->next){
+			fast = fast->next->next;
+			slow = slow->next;
+		}
+		Node* temp = slow->next;
+		slow->next = NULL;
+		return temp;
+	}
+	Node* mergeSort(Node* node){
+		if(!node || !(node->next)){
+			return node;
+		}
+		Node* temp = split(node);
+		node = mergeSort(node);
+		temp = mergeSort(temp);
+		node = merge(node, temp);
+		return node;
+	}
+	void sort(){
+		head = mergeSort(head);
+	}
+};
 
 /*******************************************************************************
 *																			   *
 *   -----------------------------Singly Linked List-------------------------   *
 *																               *
 *******************************************************************************/
-// This is basically a wrapper over the doubly linked list - abstraction to use
-// the doubly linked as singly linked list
+// A basically a wrapper over the doubly linked list
 
-template <class T>
+
+template <typename T>
 class SList{
+public:
 	List<T> list;
 	void push_back(T item){
 		list.push_back(item);
@@ -276,10 +324,40 @@ class SList{
 	void delete_value(T item){
 		list.delete_value(item);
 	}
+	void traverse(){
+		list.traverse_front();
+	}
+	void remove_front(){
+		list.remove_front();
+	}
+	void remove_back(){
+		list.remove_back();
+	}
+	T front(){
+		return list.front();
+	}
+	T back(){
+		list.back();
+	}
+	int length(){
+		return list.length();
+	}
+	typename List<T>::Node* begin(){
+		return list.begin();
+	}
+	typename List<T>::Node* end(){
+		return list.end();
+	}
+	T value(typename List<T>::Node* &node){
+		list.value(node);
+	}
+	void next(typename List<T>::Node* &node){
+		list.next(node);
+	}
+	void sort(){
+		list.sort();
+	}
 };
-
-
-
 
 
 int compare(void* a, void* b){
@@ -305,9 +383,29 @@ int main(){
 	list.traverse_front();
 	list.add_index(2, 12);
 	list.traverse_front();
+	cout << "-----" << endl;
 	cout << list.get_index(12) << endl;
 	cout << len(list) << " " << head(list) << " "  << tail(list) << endl;
-	for(List::Iterator<int> obj=list.begin(); List<int>::obj!=list.end(); List<int>::obj++){
-		cout << List<int>::obj->elem;
+	List<int>::list_iterator node;
+	cout << "Traversing using pointers" << endl;
+	for(node=list.begin(); node!=list.end(); list.next(node)){
+		cout << list.value(node) << endl;
 	}
+	cout << "----" << endl;
+	SList<int> slist;
+	slist.push_back(12);
+	slist.push_back(13);
+	slist.push_back(14);
+	slist.traverse();
+	List<int>::list_iterator snode;
+	for(snode=slist.begin(); snode!=slist.end(); slist.next(snode)){
+		cout << slist.value(snode) << endl;
+	}
+	cout << "Sorted" << endl;
+	List<int> list2;
+	list2.push_back(13);
+	list2.push_back(12);
+	list2.push_back(9);
+	list2.sort();
+	list2.traverse_front();
 }
