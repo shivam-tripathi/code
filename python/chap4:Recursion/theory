@@ -1,0 +1,36 @@
+********************************** Recursion ***********************************
+
+Recursion is a technique by which a function calls itself once or more during
+execution, or technique by which a data structure relies on smaller instances of
+very same data type in it's representation.
+Examples in art and nature: Fractal patterns, Russian Matryoshka dolls.
+
+Factorial Function (n!)
+English Ruler (example of fractal structure)
+Binary search
+File System
+
+Recursion necessarily contains one or more base cases ans recursive cases.
+
+In python every time a function is called, recursive or otherwise, a structure
+called activation record or frame is created to store the progress. This
+activation record contains namespace for storing function call's parameters and
+local variables and information about which command is currently being executed
+in the function.
+For each call, there is a different activation record. Whenever a function calls
+another function or itself, the activation record the point in the source code
+from where the function resumes execution.
+
+** Namespaces :
+    The process of determining the value associated with an identifier is called
+    name resolution. NameError is thrown is no associated objects serving as
+    values is found.
+    Whenever assignment is made to an identifier, the definition is made within
+    a scope. It can be global as well as local.
+    Each distinct scope is represented using an abstraction known as namespace.
+    A namespace manages all the identifiers defined in a given scope.
+** Fractal :
+    A shape that has self-recursive structure at various levels of
+    magnification.
+** Activation record :
+
