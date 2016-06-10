@@ -1,0 +1,3 @@
+Learn how to compute nCr % p.
+dp.cpp is dynamic programming based solution to the above problem.
+In cases where p is prime number, more interesting solutions exist.
