@@ -4,14 +4,14 @@
 #include <netinet/in.h>
 #include <string.h>
 
-struct new_media{
-    int                a;
-    unsigned long long b;
-    #define lala float;
-};
 int main(int argc, char const *argv[]) {
-    lala a;
-     a = 10;
-    printf("%lld\n", x);
-    return 0;
+	int sock_fd, new_sock_fd, port_no, cli_len;
+	char buffer[256];
+	struct sockaddr_in serv_addr, cli_addr;
+	int n;
+	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+	if(sock_fd < 0){
+		perror("Error opening socket");
+		exit(1);
+	}
 }
