@@ -1,68 +1,85 @@
-/*LIS for strictly increasing subsequence*/
-
 #include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long ll;
+// Dealing with binary search 
+// Check the first and last element separately
+// Then do the regular search in the array
+// Just make sure you return the correct result in the end ;)
 
-ll n;
-int r, l;
+int bs(std::vector<int> tails, int elem, int size) {
+	int low = 0, high = size-1, mid;
 
-// Find the sequence with just smaller element than the given sequence 
-int find(ll a[], int elem){
-	int mid;
-	l = 0; 
-	r = n-1;
-	while(l <= r){		
-
-		mid = (l+r)/2;
-
-		if(a[mid] == elem)
-			break;
-
-		else if(a[mid] > elem)
-			r = mid-1;
-
-		else 
-			l = mid+1;
+	while(low <= high) {
+		mid = (high+low)/2;
+		if (tails[mid] == elem)
+			return mid;
+		else if (tails[mid] > elem)
+			high = mid-1;
+		else if (tails[mid] < elem)
+			low = mid+1;
 	}
-	if(a[mid] == elem || a[mid] > elem) 
-		return mid - 1;
 
+	if (tails[mid] < elem)
+		mid++;
 	return mid;
 }
 
+int CeilIndex(std::vector<int> &v, int l, int r, int key) {
+    while (r-l > 1) {
+    int m = l + (r-l)/2;
+    if (v[m] >= key)
+        r = m;
+    else
+        l = m;
+    }
+ 
+    return r;
+}
 
 
-int main(int argc, char const *argv[]){
-	scanf("%lld", &n);
+int lis(vector<int> elements) {
+	if (elements.size() == 0)
+		return 0;
 
-	ll elem[n];
-	for(int i=0; i<n; i++){
-		scanf("%lld", &elem[i]);
-	}
+	vector<int> tails (elements.size(), 0);
+	tails[0] = elements[0];
 
-	ll a[n];
+	int size = 0;
 
-	for(int i=0; i<n; i++){
-		a[i] = INT_MAX;
-	}
-
-	for(int i=0; i<n; i++){
-		int index = find(a, elem[i]);
-		if(index == -1){
-			a[index+1] = elem[i];
-			r = 0;
+	for(int i=1; i<elements.size(); i++) {
+		if (elements[i] < tails[0])
+			tails[0] = elements[i];
+		else if (elements[i] > tails[size]) 
+			tails[++size] = elements[i];
+		else {
+			// int index = CeilIndex(tails, -1, size, elements[i]);
+			int index = bs(tails, elements[i], size);
+			/*
+			Note this step very cautiously : As the search return the ceil index of the number, the new number will always 
+			be inserted in the new position - as it increases the length of the previous size by one, and is smaller than 
+			number already sitting on the index.
+			*/
+			tails[index] = elements[i];
 		}
-		else{
-			if((elem[i]) < a[index+1]){
-				a[index+1] = elem[i];
-				r = max(r, index+1);
-			}
-		}
+	}
+	// cout << "Ends with " << tails[size] << endl;
+	return size+1;
+}
+
+
+int main(int argc, char const *argv[])
+{
+	int size;
+	cin >> size;
+	vector<int> elements;
+	int temp;
+	for (int i=0; i<size; i++) {
+		cin >> temp;
+		elements.push_back(temp);
 	}
 
-	cout << r+1 << endl;
+	cout << lis(elements) << endl;
 
 	return 0;
 }
