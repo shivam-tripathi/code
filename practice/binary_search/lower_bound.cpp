@@ -7,10 +7,8 @@ int lower(vector<int> a, int x) {
 	while(high-low>1) {
 		mid = low + (high - low)/2;
 		cout << "a[" << low << "] = " << a[low] << " | " << "a[" << mid << "] = " << a[mid] << " | " << "a[" << high << "] = " << a[high] << " | " << endl;
-		if (a[mid] == x)
+		if (a[mid] >= x)
 			high = mid;
-		else if (a[mid] >= x)
-			high = mid-1;
 		else 
 			low = mid;
 	}
@@ -22,6 +20,7 @@ int lower(vector<int> a, int x) {
 int main(int argc, char const *argv[])
 {
 	std::vector<int> v;
+	srand(time(NULL));
 	for (int i=0; i<25; i++) {
 		v.emplace_back((int)(100.0*rand()/INT_MAX));
 	}
@@ -29,8 +28,10 @@ int main(int argc, char const *argv[])
 	for (auto i : v) cout << i << " ";
 		cout << endl;
 	int x;
-	cin >> x;
-	// cout << v[lower_bound_bs(v, x)];
-	cout << v[lower(v, x)] << endl;
+	while (x!=-1) {
+		cout << "In :";
+		cin >> x;
+		cout << "Out :" << v[lower(v, x)] << endl;
+	}
 	return 0;
 }
