@@ -46,6 +46,7 @@ public:
 	// ********************************************************************************************
 	// * Reverse code can slow you down, so be a little cautious; plus you make terrible mistakes *
 	// ********************************************************************************************
+	
 	void reverse() { 
 		if (head == NULL || head == tail) return;
 		temp = head->next;
